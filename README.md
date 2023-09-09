@@ -4,16 +4,17 @@ This repository contains the implementation of a simple UNIX command interpreter
 
 ## Table of Contents
 
--[Introduction](#introduction)
--[Contributing](#contributing)
--[Authors](#autors)
--[License](#license)
+- [simple\_shell](#simple_shell)
+	- [Table of Contents](#table-of-contents)
+	- [Introduction](#introduction)
+	- [Contributing](#contributing)
+	- [Authors](#authors)
 
 
 ## Introduction
 
 The 'simple_shell' is a command line interpreter that provides a command line user
-interphase for unix like operating systems. It is both an interactive command 
+interphase for unix like operating systems. It is both an interactive command
 language and is used by ioperating system to control the execution of the system
 using shell scripts
 
@@ -25,7 +26,4 @@ or want to add enhancements, feel free to open a pull request.
 ## Authors
 
 This project was built by Odohofreh Joseph and Adebayo Oluwaseun
-
-##License
-
 
