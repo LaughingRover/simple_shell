@@ -9,7 +9,6 @@
 int executeCommand(char **argv)
 {
 	pid_t child_pid;
-	int status;
 
 	child_pid = fork();
 	if (child_pid == -1)
@@ -35,6 +34,8 @@ int executeCommand(char **argv)
 	}
 	else
 	{
+		int status;
+
 		wait(&status);
 	}
 
