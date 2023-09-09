@@ -2,7 +2,7 @@
 
 /**
  * main - Entry point
- * Return: 0 success, 1 failure
+ * Return: 0 success
  */
 int main(void)
 {
@@ -15,22 +15,25 @@ int main(void)
 	prompt();
 	while ((read = getline(&line, &len, stdin)) != -1)
 	{
-		/*Replace newline character with terminator '\0*/
+		/*Exit on Ctrl+D*/
+		if (line[0] == EOF)
+			break;
+
+		/*Replace '\n' with null-terminator*/
 		if (line[read - 1] == '\n')
 			line[read - 1] = '\0';
 
 		argc = getArgv(line, &argv);
-		if (argc < 0)
+		if (argc > 0)
 		{
-			perror("Command failed");
+			executeCommand(argv);
 		}
-		executeCommand(argv);
+		freeArgv(&argv);
 
 		/*Print the next prompt*/
 		prompt();
 	}
 
-	freeArgv(&argv);
 	free(line);
 	return (0);
 }
