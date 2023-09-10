@@ -60,7 +60,7 @@ int getArgv(char *input_line, char ***argv)
 
 /**
  * freeArgv - frees an array of strings
- * @argv: pointer to strings
+ * @argv: pointer to an array of strings
  */
 void freeArgv(char ***argv)
 {
@@ -76,7 +76,7 @@ void freeArgv(char ***argv)
 
 /**
  * resizeArgv - Resizes the argv array by doubling its size
- * @argv: array
+ * @argv: pointer to an array of strings
  * @max_argc: size of argv
  *
  * Return: 0 success, 1 failure
@@ -100,7 +100,7 @@ int resizeArgv(char ***argv, size_t *max_argc)
 		new_argv[i] = (*argv)[i];
 	}
 
-	free(*argv); /*Free the old array*/
+	freeArgv(argv); /*Free the old array*/
 	*argv = new_argv;
 
 	return (0);
