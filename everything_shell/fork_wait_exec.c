@@ -35,7 +35,7 @@ int main(void)
 			/**
 			 * If execve fails print an error message
 			 * and continue child process
-			 */   
+			 */
 			perror("execve error");
 			return (1);
 		}
