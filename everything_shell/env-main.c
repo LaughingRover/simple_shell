@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 /**
- *  * main - prints the environment
- *   *
- *    * Return: Always 0.
- *     */
+ * prints the environment and addresses of env and environ
+ *
+ * Return: Always 0 success
+ */
 int main(int ac, char **av, char **env)
 {
 	unsigned int i;
@@ -24,3 +24,4 @@ int main(int ac, char **av, char **env)
 	printf("address of environ: %p\n", environ);
 	return (0);
 }
+

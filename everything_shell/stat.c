@@ -4,10 +4,10 @@
 #include <unistd.h>
 
 /**
- *  * main - stat example
- *   *
- *    * Return: Always 0.
- *     */
+ * main - stat example
+ *
+ * Return: Always 0 success
+ */
 int main(int ac, char **av)
 {
 	unsigned int i;
