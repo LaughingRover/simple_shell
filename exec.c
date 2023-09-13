@@ -22,8 +22,13 @@ int executeCommand(char **argv)
 		char *cmd = argv[0];
 		char *envp[] = {NULL};
 
+		if (access(cmd, X_OK) != 0)
+			cmd = handlePath(cmd);
+
 		if (cmd == NULL)
-			exit(EXIT_FAILURE);
+		{
+			perror("Command not found");
+		}
 
 		if (execve(cmd, argv, envp) == -1)
 		{
@@ -41,3 +46,40 @@ int executeCommand(char **argv)
 
 	return (0);
 }
+
+/**
+ * handlePath - returns fullpath of command passed
+ * @cmd: command passed
+ *
+ * Return - return fullpath of command passed
+ */
+char *handlePath(char *cmd)
+{
+	char *path = _getenv("PATH");
+	char *full_path = malloc(sizeof(char) * 1024);
+	char *path_copy, *token;
+
+	path_copy = _strdup(path);
+	if ((path == NULL) || (path_copy == NULL))
+	{
+		perror("PATH not found");
+		return (NULL);
+	}
+
+	token = _strtok(path_copy, ":");
+	while (token)
+	{
+		/*concatenate the token in PATH with the command passed*/
+		full_path = construct_full_path(full_path, token, cmd);
+
+		if (access(full_path, X_OK) == 0)
+		{
+			free(path_copy);
+			return (full_path);
+		}
+		token = _strtok(NULL, ":");
+	}
+	free(path_copy);
+	return (NULL);
+}
+
