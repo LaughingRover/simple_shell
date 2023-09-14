@@ -25,8 +25,16 @@ int main(void)
 
 		argc = getArgv(line, &argv);
 
-		if (_strcmp(argv[0], "exit") == 0)
+		if ((_strcmp(argv[0], "exit") == 0) && atoi(argv[1]))
+			exit(atoi(argv[1]));
+		else if (_strcmp(argv[0], "exit") == 0)
 			break;
+
+		if (_strcmp(argv[0], "env") == 0)
+		{
+			printenv();
+			break;
+		}
 
 		if (argc > 0)
 			executeCommand(argv);
@@ -36,7 +44,6 @@ int main(void)
 		/*Print the next prompt*/
 		prompt();
 	}
-
 	free(line);
 	return (0);
 }

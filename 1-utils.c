@@ -72,3 +72,16 @@ char *construct_full_path(char *dest, char *str1, char *str2)
 	return (dest);
 }
 
+/**
+ *  printenv - prints environment variable
+ */
+void printenv(void)
+{
+	unsigned int i;
+	extern char **environ;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		printf("%s\n", environ[i]);
+	}
+}

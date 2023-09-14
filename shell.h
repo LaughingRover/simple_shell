@@ -16,6 +16,7 @@ int getArgv(char *input_line, char ***argv);
 void freeArgv(char ***argv);
 int resizeArgv(char ***argv, size_t *max_argc);
 char *_getenv(const char *name);
+void printenv(void);
 
 void trim(char **str);
 
