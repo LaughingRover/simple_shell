@@ -6,75 +6,68 @@
 #include <sys/wait.h>
 #include <limits.h>
 
-#define MAX_INPUT_LENGTH 1024
+#define MAX_COMMAND_LENGTH 1024
 
-void stripNewline(char *str)
+/**
+ * executeCommand - executes a command with full path
+ * @command: full path
+ *
+ * Return: 0 on success, 1 on failure
+ */
+void executeCommand(const char *command)
 {
-	size_t len = strlen(str);
+	pid_t child_pid;
+	int status;
+	char *argv[] = {"command", NULL};
 
-	if (len > 0 && str[len - 1] == '\n')
+	child_pid = fork();
+	if (child_pid == -1)
 	{
-		str[len - 1] = '\0'; /*Replace '\n' with null-terminator*/
+		perror("fork error");
+		exit(EXIT_FAILURE);
+	}
+
+	if (child_pid == 0)
+	{
+		/* This code runs in the child process*/
+		if (execve(command, argv, NULL) == -1)
+		{
+			perror("exec error");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		/*This runs in the parent process*/
+		wait(&status);
 	}
 }
 
 int main(void)
 {
-	char input[MAX_INPUT_LENGTH];
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read_len;
 
 	while (1)
 	{
-		printf("Shell> ");
-		if (fgets(input, sizeof(input), stdin) == NULL)
+		printf("SS-Shell> ");
+		fflush(stdout);
+
+		read_len = getline(&line, &len, stdin);
+		if (read_len == -1)
 		{
-			break; /*Exit on EOF (e.g., Ctrl+D)*/
-		}
-
-		stripNewline(input);
-
-		/*Parse the command and path*/
-		char *command = strtok(input, " ");
-		char *path = strtok(NULL, " ");
-
-		if (command == NULL)
-		{
-			printf("No command provided.\n");
-			continue; /*Continue if no command is provided*/
-		}
-
-		/*Resolve the absolute path of the command*/
-		char absolutePath[PATH_MAX];
-
-		if (realpath(command, absolutePath) == NULL)
-		{
-			perror("realpath");
-			continue; /*Continue if command not found*/
-		}
-
-		pid_t child_pid = fork();
-
-		if (child_pid == -1)
-		{
-			perror("fork error");
+			perror("getline error");
 			exit(EXIT_FAILURE);
 		}
 
-		if (child_pid == 0)
+		/*Remove the newline character if present*/
+		if (line[read_len - 1] == '\n')
 		{
-			/*Child process*/
-			if (execl(absolutePath, absolutePath, (char *)NULL) == -1)
-			{
-				perror("exec error");
-				exit(EXIT_FAILURE);
-			}
+			line[read_len - 1] = '\0';
 		}
-		else
-		{
-			/*Parent process*/
-			int status;
 
-			wait(&status);
-		}
+		executeCommand(line);
 	}
 
 	return (0);
