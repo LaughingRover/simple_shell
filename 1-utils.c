@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * _strncmp - Function that compare two strings
+ * _strncmp - Function that compare two strings up to specific length
  * @str1: first string
  * @str2: second string
  * @n: amount of bytes to compare
@@ -19,6 +19,24 @@ int _strncmp(const char *str1, const char *str2, size_t n)
 		str1++;
 		str2++;
 		n--;
+	}
+
+	return (0);
+}
+
+/**
+ * _strcmp - Function that compare two strings
+ * @str1: first string
+ * @str2: second string
+ *
+ * Return: 0 if second string is found in first string.
+ */
+int _strcmp(const char *str1, const char *str2)
+{
+	while ((*str1 == '\0') || (*str2 == '\0'))
+	{
+		if (*str1++ != *str2++)
+			return (-1);
 	}
 
 	return (0);

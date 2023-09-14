@@ -26,5 +26,6 @@ char *_strcpy(char *dest, const char *src);
 char *_strdup(const char *str);
 char *construct_full_path(char *dest, char *str1, char *str2);
 int _strncmp(const char *str1, const char *str2, size_t n);
+int _strcmp(const char *str1, const char *str2);
 
 #endif /*SHELL_H*/

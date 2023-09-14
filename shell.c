@@ -24,10 +24,13 @@ int main(void)
 			line[read_len - 1] = '\0';
 
 		argc = getArgv(line, &argv);
+
+		if (_strcmp(argv[0], "exit") == 0)
+			break;
+
 		if (argc > 0)
-		{
 			executeCommand(argv);
-		}
+
 		freeArgv(&argv);
 
 		/*Print the next prompt*/
