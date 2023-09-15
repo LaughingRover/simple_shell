@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * _strncmp - Function that compare two strings
+ * _strncmp - Function that compare two strings up to specific length
  * @str1: first string
  * @str2: second string
  * @n: amount of bytes to compare
@@ -21,7 +21,25 @@ int _strncmp(const char *str1, const char *str2, size_t n)
 		n--;
 	}
 
-	return 0;
+	return (0);
+}
+
+/**
+ * _strcmp - Function that compare two strings
+ * @str1: first string
+ * @str2: second string
+ *
+ * Return: 0 if second string is found in first string.
+ */
+int _strcmp(const char *str1, const char *str2)
+{
+	while ((*str1 == '\0') || (*str2 == '\0'))
+	{
+		if (*str1++ != *str2++)
+			return (-1);
+	}
+
+	return (0);
 }
 
 /**
@@ -54,3 +72,16 @@ char *construct_full_path(char *dest, char *str1, char *str2)
 	return (dest);
 }
 
+/**
+ *  printenv - prints environment variable
+ */
+void printenv(void)
+{
+	unsigned int i;
+	extern char **environ;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		printf("%s\n", environ[i]);
+	}
+}

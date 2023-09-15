@@ -20,7 +20,8 @@ char *_getenv(const char *name)
 		current_var = *environ_copy;
 
 		/*checks if the current VAR matches name*/
-		if ((_strncmp(current_var, name, length) == 0) && (current_var[length] == '='))
+		if ((_strncmp(current_var, name, length) == 0) &&
+				(current_var[length] == '='))
 		{
 			return (current_var + length + 1);
 			/*+1 is added to skip the '=' char*/

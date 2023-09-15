@@ -16,6 +16,7 @@ int getArgv(char *input_line, char ***argv);
 void freeArgv(char ***argv);
 int resizeArgv(char ***argv, size_t *max_argc);
 char *_getenv(const char *name);
+void printenv(void);
 
 void trim(char **str);
 
@@ -26,5 +27,6 @@ char *_strcpy(char *dest, const char *src);
 char *_strdup(const char *str);
 char *construct_full_path(char *dest, char *str1, char *str2);
 int _strncmp(const char *str1, const char *str2, size_t n);
+int _strcmp(const char *str1, const char *str2);
 
 #endif /*SHELL_H*/

@@ -8,7 +8,17 @@
  */
 int executeCommand(char **argv)
 {
+	char *cmd = argv[0];
 	pid_t child_pid;
+
+	if (access(cmd, X_OK) != 0)
+		cmd = handlePath(cmd);
+
+	if (cmd == NULL)
+	{
+		perror("Command not found");
+		return (-1);
+	}
 
 	child_pid = fork();
 	if (child_pid == -1)
@@ -19,16 +29,8 @@ int executeCommand(char **argv)
 
 	if (child_pid == 0)
 	{
-		char *cmd = argv[0];
 		char *envp[] = {NULL};
 
-		if (access(cmd, X_OK) != 0)
-			cmd = handlePath(cmd);
-
-		if (cmd == NULL)
-		{
-			perror("Command not found");
-		}
 
 		if (execve(cmd, argv, envp) == -1)
 		{
@@ -82,4 +84,3 @@ char *handlePath(char *cmd)
 	free(path_copy);
 	return (NULL);
 }
-
