@@ -24,21 +24,25 @@ int main(void)
 			line[read_len - 1] = '\0';
 
 		argc = getArgv(line, &argv);
-
-		if ((_strcmp(argv[0], "exit") == 0) && atoi(argv[1]))
-			exit(atoi(argv[1]));
-		else if (_strcmp(argv[0], "exit") == 0)
-			break;
-
-		if (_strcmp(argv[0], "env") == 0)
+		if ((_strcmp(argv[0], "exit") == 0) && argv[1] != NULL)
 		{
-			printenv();
+			int exit_code = atoi(argv[1]);
+			freeArgv(&argv);
+			free(line);
+			exit(exit_code);
+		}
+		else if (_strcmp(argv[0], "exit") == 0)
+		{
 			break;
 		}
-
-		if (argc > 0)
+		else if (_strcmp(argv[0], "env") == 0)
+		{
+			printenv();
+		}
+		else if (argc > 0)
+		{
 			executeCommand(argv);
-
+		}
 		freeArgv(&argv);
 
 		/*Print the next prompt*/

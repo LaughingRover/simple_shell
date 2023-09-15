@@ -8,13 +8,13 @@
  */
 int executeCommand(char **argv)
 {
-	char *cmd = argv[0];
+	char *cmd_path = argv[0];
 	pid_t child_pid;
 
-	if (access(cmd, X_OK) != 0)
-		cmd = handlePath(cmd);
+	if (access(cmd_path, X_OK) != 0)
+		cmd_path = handlePath(cmd_path);
 
-	if (cmd == NULL)
+	if (cmd_path == NULL)
 	{
 		perror("Command not found");
 		return (-1);
@@ -31,12 +31,9 @@ int executeCommand(char **argv)
 	{
 		char *envp[] = {NULL};
 
-
-		if (execve(cmd, argv, envp) == -1)
+		if (execve(cmd_path, argv, envp) == -1)
 		{
 			perror("execve error");
-			freeArgv(&argv);
-			exit(EXIT_FAILURE);
 		}
 	}
 	else
@@ -53,13 +50,14 @@ int executeCommand(char **argv)
  * handlePath - returns fullpath of command passed
  * @cmd: command passed
  *
- * Return - return fullpath of command passed
+ * Return: return fullpath of command passed
  */
 char *handlePath(char *cmd)
 {
 	char *path = _getenv("PATH");
+	char *path_copy;
+	char *token;
 	char *full_path = malloc(sizeof(char) * 1024);
-	char *path_copy, *token;
 
 	path_copy = _strdup(path);
 	if ((path == NULL) || (path_copy == NULL))

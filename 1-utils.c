@@ -33,9 +33,9 @@ int _strncmp(const char *str1, const char *str2, size_t n)
  */
 int _strcmp(const char *str1, const char *str2)
 {
-	while ((*str1 == '\0') || (*str2 == '\0'))
+	while (*str1++ & *str2++)
 	{
-		if (*str1++ != *str2++)
+		if (*str1 != *str2)
 			return (-1);
 	}
 
@@ -48,7 +48,7 @@ int _strcmp(const char *str1, const char *str2)
  * @str1: first string
  * @str2: second string
  *
- * Return: retrun concatenated string
+ * Return: return concatenated string
  */
 char *construct_full_path(char *dest, char *str1, char *str2)
 {
