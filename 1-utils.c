@@ -33,7 +33,7 @@ int _strncmp(const char *str1, const char *str2, size_t n)
  */
 int _strcmp(const char *str1, const char *str2)
 {
-	while (*str1++ & *str2++)
+	while ((*str1++ & *str2++))
 	{
 		if (*str1 != *str2)
 			return (-1);
