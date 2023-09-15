@@ -11,6 +11,8 @@
 void prompt(void);
 int executeCommand(char **argv);
 char *handlePath(char *cmd);
+int commandline_mode(int *argc, char ***argv, char ***env);
+void interactive_mode(int *argc, char ***argv, char ***env);
 
 int getArgv(char *input_line, char ***argv);
 void freeArgv(char ***argv);
