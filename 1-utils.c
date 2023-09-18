@@ -50,16 +50,15 @@ int _strcmp(const char *str1, const char *str2)
  *
  * Return: return concatenated string
  */
-char *construct_full_path(char *dest, char *str1, char *str2)
+char *cat_string(char *dest, char *str1, char *str2, char delim)
 {
 	size_t str1_len = _strlen(str1);
-	const char delim = '/';
 	size_t dest_len = 0;
 
 	_strcpy(dest, str1);
 
 	/*check if the delimiter can be added*/
-	if (str1_len > 0)
+	if ((str1_len > 0) && (delim != '\0'))
 	{
 		dest[str1_len] = delim;
 		dest[str1_len + 1] = '\0';
@@ -120,3 +119,4 @@ void *_realloc(void *ptr, size_t size)
 	free(ptr);
 	return (new_mem);
 }
+

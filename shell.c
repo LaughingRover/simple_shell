@@ -84,14 +84,22 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 		free(line);
 		exit(exit_code);
 	}
-	if (_strcmp((*argv)[0], "exit") == 0)
+	else if (_strcmp((*argv)[0], "exit") == 0)
 		exit(0);
-	if (_strcmp((*argv)[0], "env") == 0)
+	else if (_strcmp((*argv)[0], "env") == 0)
 		printenv();
-	if (_strcmp((*argv)[0], "cd") == 0)
+	else if (_strcmp((*argv)[0], "cd") == 0)
 		change_working_dir(*argv);
+
+	else if (_strcmp((*argv)[0], "setenv") == 0)
+		modifyenv(*argv);
+
+	else if (_strcmp((*argv)[0], "unsetenv") == 0)
+		modifyenv(*argv);
+
 	else
 		execute_command(*argv);
 
 	free(line);
 }
+
