@@ -4,7 +4,6 @@
 
 static char read_buffer[BUFFER_SIZE];
 static ssize_t buffer_index;
-static ssize_t buffer_size;
 
 /**
  * resize_getline_buf - resize the memory size of the buffer
@@ -40,7 +39,7 @@ int resize_getline_buf(char **lineptr, size_t *n, size_t new_size)
  */
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 {
-	if (lineptr == NULL || n == NULL || stream == NULL)
+	if (n == NULL || stream == NULL)
 		return (-EINVAL);
 
 	if (*lineptr == NULL || *n <= 0)
@@ -66,25 +65,25 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
  */
 ssize_t readline(char **lineptr, size_t *n, int fd)
 {
+	ssize_t read_bytes = 0;
 	ssize_t total_bytes_read = 0;
 
 	buffer_index = 0;
-	buffer_size = 0;
 
 	while (1)
 	{
 		/*Check if buffer needs to be resized*/
 		if (total_bytes_read >= (ssize_t)(*n - 1) &&
-		    resize_getline_buf(lineptr, n, (*n * 2)))
+				resize_getline_buf(lineptr, n, (*n * 2)))
 		{
 			return (-1); /*Memory allocation Failed*/
 		}
 
 		/*If the buffer is empty fill it, and reset the index to 0*/
-		if (buffer_index >= buffer_size)
+		if (buffer_index >= read_bytes)
 		{
-			buffer_size = read(fd, read_buffer, BUFFER_SIZE);
-			if (buffer_size <= 0)
+			read_bytes = read(fd, read_buffer, BUFFER_SIZE);
+			if (read_bytes <= 0)
 				return ((total_bytes_read == 0) ? EOF : -1);
 		}
 
@@ -99,3 +98,4 @@ ssize_t readline(char **lineptr, size_t *n, int fd)
 		(*lineptr)[total_bytes_read++] = read_buffer[buffer_index++];
 	}
 }
+
