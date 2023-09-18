@@ -1,9 +1,5 @@
 #include "shell.h"
 
-#ifdef __GNUC__
-#define UNUSED __attribute__((__unused__))
-#endif
-
 /**
  * main - Entry point
  * @argc: argument count
@@ -62,39 +58,38 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 {
 	char *line = NULL;
 	size_t len = 0;
-	int read_len = getline(&line, &len, stdin);
+	int read_len = _getline(&line, &len, stdin);
+	char newline = '\n';
 
-	/*Exit on Ctrl+D (EOF)*/
-	if (read_len == -1)
+	if (read_len == -1) /*Exit on Ctrl+D (EOF)*/
 	{
 		free(line);
+		write(1, &newline, 1);
 		exit(0);
 	}
-
-	/*Replace '\n' with null-terminator*/
-	if (line[read_len - 1] == '\n')
+	if (line[read_len - 1] == '\n') /*Replace '\n' with null-terminator*/
 		line[read_len - 1] = '\0';
 
 	*argc = getArgv(line, argv);
-	if (*argc > 0)
+	if (*argc < 1)
 	{
-		if ((_strcmp((*argv)[0], "exit") == 0) && (*argv)[1] != NULL)
-		{
-			int exit_code = atoi((*argv)[1]);
-
-			freeArgv(argv);
-			free(line);
-			exit(exit_code);
-		}
-
-		if (_strcmp((*argv)[0], "exit") == 0)
-			exit(0);
-
-		if (_strcmp((*argv)[0], "env") == 0)
-			printenv();
-
-		else
-			executeCommand(*argv);
+		free(line);
+		return;
 	}
+	if ((_strcmp((*argv)[0], "exit") == 0) && (*argv)[1] != NULL)
+	{
+		int exit_code = atoi((*argv)[1]);
+
+		freeArgv(argv);
+		free(line);
+		exit(exit_code);
+	}
+	if (_strcmp((*argv)[0], "exit") == 0)
+		exit(0);
+	if (_strcmp((*argv)[0], "env") == 0)
+		printenv();
+	else
+		executeCommand(*argv);
+
 	free(line);
 }

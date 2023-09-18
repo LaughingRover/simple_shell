@@ -85,3 +85,37 @@ void printenv(void)
 		printf("%s\n", environ[i]);
 	}
 }
+
+/**
+ * _realloc - resizes an allocated memory
+ * @ptr: memory location to resize
+ * @size: the new size of the memory
+ *
+ * Description: creates a new memory location with size and
+ * copies the content of the previous memory to it before freeing it.
+ *
+ * Return: void
+*/
+void *_realloc(void *ptr, size_t size)
+{
+	void *new_mem;
+
+	if (ptr == NULL)
+		return (malloc(size));
+
+	if (size == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+
+	new_mem = malloc(size);
+	if (new_mem == NULL)
+		return (NULL);
+
+	/*Copy existing pointers to new memory location*/
+	memcpy(new_mem, ptr, size);
+
+	free(ptr);
+	return (new_mem);
+}
