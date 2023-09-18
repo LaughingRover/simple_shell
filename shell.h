@@ -4,9 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
+#include <string.h>
 
 #include <sys/types.h>
 #include <sys/wait.h>
+
+#ifdef __GNUC__
+#define UNUSED __attribute__((__unused__))
+#endif
 
 void prompt(void);
 int executeCommand(char **argv);
@@ -18,7 +24,10 @@ int getArgv(char *input_line, char ***argv);
 void freeArgv(char ***argv);
 int resizeArgv(char ***argv, size_t *max_argc);
 char *_getenv(const char *name);
+void *_realloc(void *ptr, size_t size);
 void printenv(void);
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+int resize_getline_buf(char **lineptr, size_t *n, size_t new_size);
 
 void trim(char **str);
 
