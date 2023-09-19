@@ -19,6 +19,7 @@ int executeCommand(char **argv);
 char *handlePath(char *cmd);
 int commandline_mode(int *argc, char ***argv, char ***env);
 void interactive_mode(int *argc, char ***argv, char ***env);
+void change_working_dir(char **argv);
 
 int getArgv(char *input_line, char ***argv);
 void freeArgv(char ***argv);
@@ -27,6 +28,7 @@ char *_getenv(const char *name);
 void *_realloc(void *ptr, size_t size);
 void printenv(void);
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+ssize_t read_line(char **lineptr, size_t *n, int fd);
 int resize_getline_buf(char **lineptr, size_t *n, size_t new_size);
 
 void trim(char **str);
