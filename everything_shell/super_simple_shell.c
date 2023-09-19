@@ -9,12 +9,12 @@
 #define MAX_COMMAND_LENGTH 1024
 
 /**
- * executeCommand - executes a command with full path
+ * execute_command - executes a command with full path
  * @command: full path
  *
  * Return: 0 on success, 1 on failure
  */
-void executeCommand(const char *command)
+void execute_command(const char *command)
 {
 	pid_t child_pid;
 	int status;
@@ -67,7 +67,7 @@ int main(void)
 			line[read_len - 1] = '\0';
 		}
 
-		executeCommand(line);
+		execute_command(line);
 	}
 
 	return (0);

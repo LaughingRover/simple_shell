@@ -23,7 +23,7 @@ int main(int argc, char **argv, char **env)
 
 		interactive_mode(&argc, &argv, &env);
 
-		freeArgv(&argv);
+		free_argv(&argv);
 	}
 	return (0);
 }
@@ -70,7 +70,7 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 	if (line[read_len - 1] == '\n') /*Replace '\n' with null-terminator*/
 		line[read_len - 1] = '\0';
 
-	*argc = getArgv(line, argv);
+	*argc = get_argv(line, argv);
 	if (*argc < 1)
 	{
 		free(line);
@@ -80,7 +80,7 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 	{
 		int exit_code = atoi((*argv)[1]);
 
-		freeArgv(argv);
+		free_argv(argv);
 		free(line);
 		exit(exit_code);
 	}
@@ -91,7 +91,7 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 	if (_strcmp((*argv)[0], "cd") == 0)
 		change_working_dir(*argv);
 	else
-		executeCommand(*argv);
+		execute_command(*argv);
 
 	free(line);
 }
