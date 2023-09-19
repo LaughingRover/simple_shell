@@ -88,6 +88,8 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 		exit(0);
 	if (_strcmp((*argv)[0], "env") == 0)
 		printenv();
+	if (_strcmp((*argv)[0], "cd") == 0)
+		change_working_dir(*argv);
 	else
 		executeCommand(*argv);
 
