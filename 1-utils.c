@@ -113,7 +113,8 @@ void *_realloc(void *ptr, size_t size)
 	if (new_mem == NULL)
 		return (NULL);
 
-	/*Copy existing pointers to new memory location*/
+	/*Reset garbage values and copy data to new memory location*/
+	memset(new_mem, 0, size);
 	memcpy(new_mem, ptr, size);
 
 	free(ptr);
