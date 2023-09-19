@@ -49,6 +49,8 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 		*lineptr = malloc(*n);
 		if (*lineptr == NULL)
 			return (-ENOMEM);
+
+		memset(*lineptr, 0, BUFFER_SIZE);
 	}
 
 	return (read_line(lineptr, n, stream->_fileno));
@@ -95,6 +97,5 @@ ssize_t read_line(char **lineptr, size_t *n, int fd)
 		}
 
 		(*lineptr)[total_bytes_read++] = read_buffer[buffer_index++];
-		printf("read_buffer: %s", *lineptr);
 	}
 }
