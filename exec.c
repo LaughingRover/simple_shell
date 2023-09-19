@@ -1,18 +1,18 @@
 #include "shell.h"
 
 /**
- * executeCommand - executes a command with arguments
+ * execute_command - executes a command with arguments
  * @argv: array of command and arguments
  *
  * Return: 0 on success, 1 on failure
  */
-int executeCommand(char **argv)
+int execute_command(char **argv)
 {
 	char *cmd_path = argv[0];
 	pid_t child_pid;
 
 	if (access(cmd_path, X_OK) != 0)
-		cmd_path = handlePath(cmd_path);
+		cmd_path = handle_path(cmd_path);
 
 	if (cmd_path == NULL)
 	{
@@ -47,12 +47,12 @@ int executeCommand(char **argv)
 }
 
 /**
- * handlePath - returns fullpath of command passed
+ * handle_path - returns fullpath of command passed
  * @cmd: command passed
  *
  * Return: return fullpath of command passed
  */
-char *handlePath(char *cmd)
+char *handle_path(char *cmd)
 {
 	char *path = _getenv("PATH");
 	char *path_copy;

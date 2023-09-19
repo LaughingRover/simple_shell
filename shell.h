@@ -17,9 +17,9 @@
 void prompt(void);
 int commandline_mode(int *argc, char ***argv, char ***env);
 void interactive_mode(int *argc, char ***argv, char ***env);
-char *handlePath(char *cmd);
+char *handle_path(char *cmd);
 char *construct_full_path(char *dest, char *str1, char *str2);
-int executeCommand(char **argv);
+int execute_command(char **argv);
 void change_working_dir(char **argv);
 
 void trim(char **str);

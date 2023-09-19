@@ -13,13 +13,13 @@ void prompt(void)
 }
 
 /**
- * getArgv - splits string gotten from stdin
+ * get_argv - splits string gotten from stdin
  * @input_line: string to split
  * @argv: is updated with tokenized string
  *
  * Return: number of arguments parsed (argc) or -1 in case of an error
  */
-int getArgv(char *input_line, char ***argv)
+int get_argv(char *input_line, char ***argv)
 {
 	const char *delim = " "; /*Delimeter for tokenization*/
 	char *token = NULL;
@@ -50,7 +50,7 @@ int getArgv(char *input_line, char ***argv)
 
 		if (argc >= max_argc)
 		{
-			if (resizeArgv(argv, &max_argc) != 0)
+			if (resize_argv(argv, &max_argc) != 0)
 				return (-1);
 		}
 	}
@@ -59,10 +59,10 @@ int getArgv(char *input_line, char ***argv)
 }
 
 /**
- * freeArgv - frees an array of strings
+ * free_argv - frees an array of strings
  * @argv: pointer to an array of strings
  */
-void freeArgv(char ***argv)
+void free_argv(char ***argv)
 {
 	size_t i = 0;
 
@@ -75,13 +75,13 @@ void freeArgv(char ***argv)
 }
 
 /**
- * resizeArgv - Resizes the argv array by doubling its size
+ * resize_argv - Resizes the argv array by doubling its size
  * @argv: pointer to an array of strings
  * @max_argc: size of argv
  *
  * Return: 0 success, 1 failure
  */
-int resizeArgv(char ***argv, size_t *max_argc)
+int resize_argv(char ***argv, size_t *max_argc)
 {
 	char **new_argv;
 	size_t i;
@@ -100,7 +100,7 @@ int resizeArgv(char ***argv, size_t *max_argc)
 		new_argv[i] = (*argv)[i];
 	}
 
-	freeArgv(argv); /*Free the old array*/
+	free_argv(argv); /*Free the old array*/
 	*argv = new_argv;
 
 	return (0);

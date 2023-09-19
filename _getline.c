@@ -53,18 +53,18 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 		memset(*lineptr, 0, BUFFER_SIZE);
 	}
 
-	return (read_line(lineptr, n, stream->_fileno));
+	return (readline(lineptr, n, stream->_fileno));
 }
 
 /**
- * read_line - reads a line from a stream and stores it into lineptr
+ * readline - reads a line from a stream and stores it into lineptr
  * @lineptr: pointer to where the read file will be stored
  * @n: size of allocated buffer
  * @fd: file descriptor for stream to read from
  *
  * Return: total amount bytes read on Success
  */
-ssize_t read_line(char **lineptr, size_t *n, int fd)
+ssize_t readline(char **lineptr, size_t *n, int fd)
 {
 	ssize_t total_bytes_read = 0;
 
@@ -75,7 +75,7 @@ ssize_t read_line(char **lineptr, size_t *n, int fd)
 	{
 		/*Check if buffer needs to be resized*/
 		if (total_bytes_read >= (ssize_t)(*n - 1) &&
-		    resize_getline_buf(lineptr, n, *n * 1))
+		    resize_getline_buf(lineptr, n, (*n * 2)))
 		{
 			return (-1); /*Memory allocation Failed*/
 		}
