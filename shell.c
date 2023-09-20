@@ -56,6 +56,7 @@ int commandline_mode(int *argc UNUSED, char ***argv UNUSED, char ***env UNUSED)
  */
 void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 {
+	get_builtin execute_builtin;
 	char *line = NULL;
 	size_t len = 0;
 	int read_len = _getline(&line, &len, stdin);
@@ -76,30 +77,12 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 		free(line);
 		return;
 	}
-	if ((_strcmp((*argv)[0], "exit") == 0) && (*argv)[1] != NULL)
-	{
-		int exit_code = atoi((*argv)[1]);
 
-		free_argv(argv);
-		free(line);
-		exit(exit_code);
-	}
-	else if (_strcmp((*argv)[0], "exit") == 0)
-		exit(0);
-	else if (_strcmp((*argv)[0], "env") == 0)
-		printenv();
-	else if (_strcmp((*argv)[0], "cd") == 0)
-		change_working_dir(*argv);
-
-	else if (_strcmp((*argv)[0], "setenv") == 0)
-		modifyenv(*argv);
-
-	else if (_strcmp((*argv)[0], "unsetenv") == 0)
-		modifyenv(*argv);
-
+	execute_builtin = handle_builtins((*argv)[0]);
+	if (execute_builtin)
+		execute_builtin(argv);
 	else
 		execute_command(*argv);
 
 	free(line);
 }
-

@@ -43,10 +43,11 @@ int _strcmp(const char *str1, const char *str2)
 }
 
 /**
- * construct_full_path - concatenate two strings with the delimiter "/"
+ * cat_string - concatenate two strings with the delimiter "/"
  * @dest: destination of the concatenated string
  * @str1: first string
  * @str2: second string
+ * @delim: delimeter
  *
  * Return: return concatenated string
  */
@@ -69,20 +70,6 @@ char *cat_string(char *dest, char *str1, char *str2, char delim)
 	_strcpy(dest + dest_len, str2);
 
 	return (dest);
-}
-
-/**
- *  printenv - prints environment variable
- */
-void printenv(void)
-{
-	unsigned int i;
-	extern char **environ;
-
-	for (i = 0; environ[i] != NULL; i++)
-	{
-		printf("%s\n", environ[i]);
-	}
 }
 
 /**
