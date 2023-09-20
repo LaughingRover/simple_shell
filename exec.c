@@ -43,6 +43,7 @@ int execute_command(char **argv)
 		wait(&status);
 	}
 
+	free(cmd_path);
 	return (0);
 }
 

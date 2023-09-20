@@ -16,12 +16,12 @@ void prompt(void)
  * get_argv - splits string gotten from stdin
  * @input_line: string to split
  * @argv: is updated with tokenized string
+ * @delim: delimiter
  *
  * Return: number of arguments parsed (argc) or -1 in case of an error
  */
-int get_argv(char *input_line, char ***argv)
+int get_argv(char *input_line, char ***argv, const char *delim)
 {
-	const char *delim = " "; /*Delimeter for tokenization*/
 	char *token = NULL;
 	size_t max_argc = 16;
 	size_t argc = 0;
