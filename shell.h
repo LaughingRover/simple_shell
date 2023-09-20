@@ -65,6 +65,9 @@ char *_strdup(const char *str);
 char *cat_string(char *dest, char *str1, char *str2, char delim);
 int _strncmp(const char *str1, const char *str2, size_t n);
 int _strcmp(const char *str1, const char *str2);
+
+char *_memset(char *s, char b, unsigned int n);
+char *_memcpy(char *dest, char *src, unsigned int n);
 void *_realloc(void *ptr, size_t size);
 
 #endif /*SHELL_H*/
