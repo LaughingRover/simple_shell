@@ -33,7 +33,7 @@ typedef struct builtin_t
 
 void prompt(void);
 int execute_commands_from_file(int *argc, char ***argv);
-void interactive_mode(int *argc, char ***argv, char ***env);
+void interactive_mode(int *argc, char ***argv);
 char *handle_path(char *cmd);
 int run_command(char ***argv);
 int execute_command(char **argv);
@@ -48,7 +48,7 @@ int change_working_dir(char ***argv);
 /*--------------------------------------------*/
 
 void trim(char **str);
-int get_argv(char *input_line, char ***argv);
+int get_argv(char *input_line, char ***argv, const char *delim);
 void free_argv(char ***argv);
 int resize_argv(char ***argv, size_t *max_argc);
 char *_getenv(const char *name);

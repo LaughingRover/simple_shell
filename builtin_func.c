@@ -59,15 +59,14 @@ int exit_simple_shell(char ***argv)
 
 	if (!exit_code)
 	{
+		free_argv(argv);
 		exit(0);
 	}
 	else
 	{
 		int code = atoi(exit_code);
+
 		free_argv(argv);
-		/**
-		 * TODO: Free line here
-		 */
 		exit(code);
 	}
 	return (0);

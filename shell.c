@@ -4,14 +4,11 @@
  * main - Entry point
  * @argc: argument count
  * @argv: argument vector
- * @env: environment variables
  *
  * Return: 0 success
  */
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv/*, char **env*/)
 {
-	(void)env;
-
 	if (argc > 1)
 	{
 		exit(execute_commands_from_file(&argc, &argv));
@@ -21,7 +18,7 @@ int main(int argc, char **argv, char **env)
 	{
 		prompt();
 
-		interactive_mode(&argc, &argv, &env);
+		interactive_mode(&argc, &argv);
 
 		free_argv(&argv);
 	}
@@ -32,7 +29,6 @@ int main(int argc, char **argv, char **env)
  * execute_commands_from_file - Execute commands from a file
  * @argc: argument count
  * @argv: argument vector
- * @env: environment variables
  *
  * Description: Reads commands from the specified file and executes them
  *
@@ -44,6 +40,7 @@ int execute_commands_from_file(int *argc, char ***argv)
 	int fd = open(filename, O_RDONLY);
 	size_t n = BUFFER_SIZE;
 	char *lineptr = malloc(n);
+	const char *delim;
 
 	if (fd == -1)
 	{
@@ -55,6 +52,7 @@ int execute_commands_from_file(int *argc, char ***argv)
 	while (1)
 	{
 		ssize_t bytes_read = readline(&lineptr, &n, fd);
+
 		printf("\nbytes_read: %ld\n", bytes_read);
 
 		lineptr[bytes_read - 1] = '\0';
@@ -71,8 +69,10 @@ int execute_commands_from_file(int *argc, char ***argv)
 		if (bytes_read == 0)
 			break;
 
+		delim = (_strchr(lineptr, ';') != NULL) ? ";" : " ";
+
 		/*Tokenize command into argv*/
-		*argc = get_argv(lineptr, argv);
+		*argc = get_argv(lineptr, argv, delim);
 
 		printf("lineptr: %s %s\n", (*argv)[0], (*argv)[1]);
 		printf("argc: %d\n", *argc);
@@ -99,16 +99,16 @@ int execute_commands_from_file(int *argc, char ***argv)
  * interactive_mode - Run shell in interactive mode
  * @argc: argument count
  * @argv: argument vector
- * @env: environment variables
  *
  * Return: 0 success
  */
-void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
+void interactive_mode(int *argc, char ***argv)
 {
 	char *line = NULL;
 	size_t len = 0;
 	int read_len = _getline(&line, &len, stdin);
 	char newline = '\n';
+	const char *delim;
 
 	if (read_len == -1) /*Exit on Ctrl+D (EOF)*/
 	{
@@ -119,14 +119,16 @@ void interactive_mode(int *argc, char ***argv, char ***env UNUSED)
 	if (line[read_len - 1] == '\n') /*Replace '\n' with null-terminator*/
 		line[read_len - 1] = '\0';
 
-	*argc = get_argv(line, argv);
+	delim = (_strchr(line, ';') != NULL) ? ";" : " ";
+	*argc = get_argv(line, argv, delim);
 	if (*argc < 1)
 	{
 		free(line);
 		return;
 	}
-	run_command(argv);
 	free(line);
+	run_command(argv);
+	free_argv(argv);
 }
 
 /**
