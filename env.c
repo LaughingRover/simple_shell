@@ -1,49 +1,14 @@
 #include "shell.h"
 
 /**
- * modifyenv - modifies current environment using setenv or unsetenv
- * @argv - argument vector
- *
- * Return: 0 if successful
- */
-int modifyenv(char **argv)
-{
-	char *command = argv[0];
-	int result;
-
-	if (_strcmp(command, "setenv") == 0 && (argv[1] != NULL) && (argv[2] != NULL))
-	{
-		char *name = argv[1];
-		char *value = argv[2];
-
-		result = _setenv(name, value, 1);
-
-		return (result);
-	}
-
-	if (_strcmp(command, "unsetenv") == 0 && (argv[1] != NULL))
-	{
-		char *name = argv[1];
-
-		result = _unsetenv(name);
-
-		return (result);
-	}
-
-	perror("Error: Environment not modified");
-	return (-1);
-
-}
-/**
- * _setenv_new - adds a new environment variable
+ * set_new_env - adds a new environment variable
  * @name: name of variable
  * @value: value of variable
  *
  * Return: 0 if successful
  */
-int _setenv_new(char *name, char *value)
+int set_new_env(char *name, char *value)
 {
-	extern char **environ;
 	char **new_environ;
 	char **new_env_ptr, **env_ptr;
 	size_t new_variable_len = _strlen(name) + _strlen(value) + 2;
@@ -69,8 +34,10 @@ int _setenv_new(char *name, char *value)
 		env_ptr++;
 
 	new_environ = malloc((env_ptr - environ + 2) * sizeof(char *));
-	/* "(env_ptr - environ)" calculates the number of variables
-	in environment and +2 is for the new variable and NULL*/
+	/**
+	 * "(env_ptr - environ)" calculates the number of variables
+	 * in environment and +2 is for the new variable and NULL
+	 */
 	if (new_environ == NULL)
 	{
 		perror("Failed to allocate memory");
@@ -101,43 +68,42 @@ int _setenv_new(char *name, char *value)
  */
 int _setenv(char *name, char *value, int overwrite)
 {
-	extern char **environ;
-	char *new_variable;
 	size_t name_len = _strlen(name);
 	size_t new_variable_len = name_len + _strlen(value) + 2;
 	/* +2 is added for '=' and '\0'*/
 
 	char **env_ptr = environ;
 
+	if (!overwrite)
+		return (0); /*variable exist and overwrite is not allowed*/
+
 	while (*env_ptr)
 	{
 		/* check if existing variable match name*/
-		if (_strncmp(*env_ptr, name, name_len) == 0 && ((*env_ptr)[name_len] == '='))
+		if (_strncmp(*env_ptr, name, name_len) == 0 &&
+		    ((*env_ptr)[name_len] == '='))
 		{
-			if (overwrite)
-			{
-				new_variable = malloc(new_variable_len);
-				if (new_variable == NULL)
-				{
-					perror("Failed to allocate memory");
-					return (-1);
-				}
-				new_variable = cat_string(new_variable, name, value, '=');
-				/*replace old variable with new variable*/
-				free(*env_ptr);
-				*env_ptr = new_variable;
+			char *new_variable = malloc(new_variable_len);
 
-				free(new_variable);
-				printf("overwrite suucesful\n");
-				return (0);
+			if (new_variable == NULL)
+			{
+				perror("Failed to allocate memory");
+				return (-1);
 			}
-			else
-				return (0); /*variable exist and overwrite is not allowed*/
+
+			new_variable = cat_string(new_variable, name, value, '=');
+			/*replace old variable with new variable*/
+			free(*env_ptr);
+			*env_ptr = new_variable;
+
+			free(new_variable);
+			printf("overwrite suucesful\n");
+			return (0);
 		}
 		env_ptr++;
 	}
 	/*if the variable does not exist*/
-	return (_setenv_new(name, value));
+	return (set_new_env(name, value));
 }
 
 /**
@@ -148,7 +114,6 @@ int _setenv(char *name, char *value, int overwrite)
  */
 int _unsetenv(char *name)
 {
-	extern char **environ;
 	char **env_ptr;
 	char **next_env_ptr;
 	size_t name_len = _strlen(name);
@@ -182,3 +147,34 @@ int _unsetenv(char *name)
 	return (0); /*variable not found*/
 }
 
+/**
+ * _getenv - gets an environment variable.
+ * @name: variable name.
+ *
+ * Return: returns pointer to value in environment or NUll if not found.
+ */
+char *_getenv(const char *name)
+{
+	char **environ_copy;
+	char *current_var;
+	unsigned int length = _strlen(name);
+
+
+	environ_copy = environ;
+	while (*environ_copy != NULL)
+	{
+		current_var = *environ_copy;
+
+		/*checks if the current VAR matches name*/
+		if ((_strncmp(current_var, name, length) == 0) &&
+				(current_var[length] == '='))
+		{
+			return (current_var + length + 1);
+			/*+1 is added to skip the '=' char*/
+		}
+
+		environ_copy++;
+	}
+
+	return (NULL);
+}

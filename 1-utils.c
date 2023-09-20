@@ -43,10 +43,11 @@ int _strcmp(const char *str1, const char *str2)
 }
 
 /**
- * construct_full_path - concatenate two strings with the delimiter "/"
+ * cat_string - concatenate two strings with the delimiter "/"
  * @dest: destination of the concatenated string
  * @str1: first string
  * @str2: second string
+ * @delim: delimeter
  *
  * Return: return concatenated string
  */
@@ -70,53 +71,3 @@ char *cat_string(char *dest, char *str1, char *str2, char delim)
 
 	return (dest);
 }
-
-/**
- *  printenv - prints environment variable
- */
-void printenv(void)
-{
-	unsigned int i;
-	extern char **environ;
-
-	for (i = 0; environ[i] != NULL; i++)
-	{
-		printf("%s\n", environ[i]);
-	}
-}
-
-/**
- * _realloc - resizes an allocated memory
- * @ptr: memory location to resize
- * @size: the new size of the memory
- *
- * Description: creates a new memory location with size and
- * copies the content of the previous memory to it before freeing it.
- *
- * Return: void
-*/
-void *_realloc(void *ptr, size_t size)
-{
-	void *new_mem;
-
-	if (ptr == NULL)
-		return (malloc(size));
-
-	if (size == 0)
-	{
-		free(ptr);
-		return (NULL);
-	}
-
-	new_mem = malloc(size);
-	if (new_mem == NULL)
-		return (NULL);
-
-	/*Reset garbage values and copy data to new memory location*/
-	memset(new_mem, 0, size);
-	memcpy(new_mem, ptr, size);
-
-	free(ptr);
-	return (new_mem);
-}
-

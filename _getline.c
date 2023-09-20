@@ -49,7 +49,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 		if (*lineptr == NULL)
 			return (-ENOMEM);
 
-		memset(*lineptr, 0, BUFFER_SIZE);
+		_memset(*lineptr, 0, BUFFER_SIZE);
 	}
 
 	return (readline(lineptr, n, stream->_fileno));
@@ -91,7 +91,7 @@ ssize_t readline(char **lineptr, size_t *n, int fd)
 		{
 			/*Reset Buffer*/
 			buffer_index = 0;
-			memset(read_buffer, 0, BUFFER_SIZE);
+			_memset(read_buffer, 0, BUFFER_SIZE);
 			return (total_bytes_read + 1);
 		}
 

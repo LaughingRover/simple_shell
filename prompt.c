@@ -84,15 +84,13 @@ void free_argv(char ***argv)
 int resize_argv(char ***argv, size_t *max_argc)
 {
 	char **new_argv;
-	size_t i;
+	size_t new_size, i;
 	*max_argc *= 2;
 
-	new_argv = malloc(*max_argc * sizeof(char *));
+	new_size = *max_argc * sizeof(char *);
+	new_argv = _realloc(*argv, new_size);
 	if (new_argv == NULL)
-	{
-		perror("Memory allocation failed");
-		return (-1);
-	}
+		return (-ENOMEM);
 
 	/*Copy existing pointers to the new array*/
 	for (i = 0; i < *max_argc / 2; i++)
@@ -133,4 +131,3 @@ void trim(char **str)
 	/*Update the pointer to the trimmed string*/
 	*str = start;
 }
-
