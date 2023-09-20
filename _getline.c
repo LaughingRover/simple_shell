@@ -1,7 +1,5 @@
 #include "shell.h"
 
-#define BUFFER_SIZE 128
-
 static char read_buffer[BUFFER_SIZE];
 static ssize_t buffer_index;
 
@@ -57,7 +55,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 
 /**
  * readline - reads a line from a stream and stores it into lineptr
- * @lineptr: pointer to where the read file will be stored
+ * @lineptr: pointer to where the read line will be stored
  * @n: size of allocated buffer
  * @fd: file descriptor for stream to read from
  *

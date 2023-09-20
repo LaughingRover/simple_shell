@@ -70,7 +70,7 @@ char *handle_path(char *cmd)
 	while (token)
 	{
 		/*concatenate the token in PATH with the command passed*/
-		full_path = cat_string(full_path, token, cmd, '/');
+		full_path = _strcat(full_path, token, cmd, '/');
 
 		if (access(full_path, X_OK) == 0)
 		{

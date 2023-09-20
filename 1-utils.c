@@ -43,7 +43,7 @@ int _strcmp(const char *str1, const char *str2)
 }
 
 /**
- * cat_string - concatenate two strings with the delimiter "/"
+ * _strcat - concatenate two strings with the delimiter "/"
  * @dest: destination of the concatenated string
  * @str1: first string
  * @str2: second string
@@ -51,7 +51,7 @@ int _strcmp(const char *str1, const char *str2)
  *
  * Return: return concatenated string
  */
-char *cat_string(char *dest, char *str1, char *str2, char delim)
+char *_strcat(char *dest, char *str1, char *str2, char delim)
 {
 	size_t str1_len = _strlen(str1);
 	size_t dest_len = 0;

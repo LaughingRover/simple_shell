@@ -1,15 +1,15 @@
 #include "shell.h"
 
 /**
- * handle_builtins - handles builtin function
+ * handle_builtin_func - handles builtin function
  * @cmd: command to check if it's a builtin
  *
  * Return: builtin function, NULL if it doesn't exist
  */
-int (*handle_builtins(char *cmd))(char ***argv)
+int (*handle_builtin_func(char *cmd))(char ***argv)
 {
 	builtin_t builtins[] = {
-		{"exit", builtin_exit},
+		{"exit", exit_simple_shell},
 		{"printenv", printenv},
 		{"env", printenv},
 		{"setenv", modifyenv},

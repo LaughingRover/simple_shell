@@ -26,7 +26,7 @@ int set_new_env(char *name, char *value)
 		perror("Failed to allocate memory");
 		return (-ENOMEM);
 	}
-	new_variable = cat_string(new_variable, name, value, '=');
+	new_variable = _strcat(new_variable, name, value, '=');
 
 	/*find the number of variable in environ*/
 	env_ptr = environ;
@@ -91,7 +91,7 @@ int _setenv(char *name, char *value, int overwrite)
 				return (-1);
 			}
 
-			new_variable = cat_string(new_variable, name, value, '=');
+			new_variable = _strcat(new_variable, name, value, '=');
 			/*replace old variable with new variable*/
 			free(*env_ptr);
 			*env_ptr = new_variable;
