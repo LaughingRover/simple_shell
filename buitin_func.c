@@ -48,12 +48,12 @@ int printenv(char ***argv)
 }
 
 /**
- * builtin_exit - exit shell
+ * exit_simple_shell - exit shell
  * @argv: argument vector
  *
  * Return: 0 on exit and status if exit code is given
  */
-int builtin_exit(char ***argv)
+int exit_simple_shell(char ***argv)
 {
 	char *exit_code = (*argv)[1];
 
@@ -61,12 +61,16 @@ int builtin_exit(char ***argv)
 	{
 		exit(0);
 	}
-
-	free_argv(argv);
-	/**
-	 * TODO: Free line here
-	 */
-	exit(atoi(exit_code));
+	else
+	{
+		int code = atoi(exit_code);
+		free_argv(argv);
+		/**
+		 * TODO: Free line here
+		 */
+		exit(code);
+	}
+	return (0);
 }
 
 /**
@@ -81,7 +85,7 @@ int modifyenv(char ***argv)
 	int result;
 
 	if (_strcmp(command, "setenv") == 0 &&
-			((*argv)[1] != NULL) && ((*argv)[2] != NULL))
+	    ((*argv)[1] != NULL) && ((*argv)[2] != NULL))
 	{
 		char *name = (*argv)[1];
 		char *value = (*argv)[2];

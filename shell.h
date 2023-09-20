@@ -9,10 +9,13 @@
 
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #ifdef __GNUC__
 #define UNUSED __attribute__((__unused__))
 #endif
+
+#define BUFFER_SIZE 128
 
 extern char **environ;
 
@@ -20,7 +23,7 @@ extern char **environ;
  * struct builtin_t - builtin function
  * @name: name of builtin function
  * @func: pointer to builtin function
-*/
+ */
 typedef struct builtin_t
 {
 	char *name;
@@ -29,17 +32,17 @@ typedef struct builtin_t
 } builtin_t;
 
 void prompt(void);
-int commandline_mode(int *argc, char ***argv, char ***env);
+int execute_commands_from_file(int *argc, char ***argv);
 void interactive_mode(int *argc, char ***argv, char ***env);
 char *handle_path(char *cmd);
-char *construct_full_path(char *dest, char *str1, char *str2);
+int run_command(char ***argv);
 int execute_command(char **argv);
 
 /*-----------builtin function------------------*/
-int (*handle_builtins(char *s))(char ***argv);
+int (*handle_builtin_func(char *s))(char ***argv);
 typedef int (*get_builtin)(char ***argv);
 int modifyenv(char ***argv);
-int builtin_exit(char ***argv);
+int exit_simple_shell(char ***argv);
 int printenv(char ***argv UNUSED);
 int change_working_dir(char ***argv);
 /*--------------------------------------------*/
@@ -62,7 +65,7 @@ char *_strchr(const char *str, int character);
 char *_strtok(char *str, const char *delim);
 char *_strcpy(char *dest, const char *src);
 char *_strdup(const char *str);
-char *cat_string(char *dest, char *str1, char *str2, char delim);
+char *_strcat(char *dest, char *str1, char *str2, char delim);
 int _strncmp(const char *str1, const char *str2, size_t n);
 int _strcmp(const char *str1, const char *str2);
 

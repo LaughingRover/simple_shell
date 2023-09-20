@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * __memset- fills memory with constant bytes
+ * _memset- fills memory with constant bytes
  * @s: chararacter
  * @b: character
  * @n: unsigned integer
@@ -20,7 +20,7 @@ char *_memset(char *s, char b, unsigned int n)
 }
 
 /**
- * __memcpy - copies memory area
+ * _memcpy - copies memory area
  * @dest: destination
  * @src: source
  * @n: amount of bytes
