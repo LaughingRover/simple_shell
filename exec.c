@@ -10,9 +10,13 @@ int execute_command(char **argv)
 {
 	char *cmd_path = argv[0];
 	pid_t child_pid;
+	size_t ishandlepath = 0;
 
 	if (access(cmd_path, X_OK) != 0)
+	{
 		cmd_path = handle_path(cmd_path);
+		ishandlepath = 1;
+	}
 
 	if (cmd_path == NULL)
 	{
@@ -43,7 +47,10 @@ int execute_command(char **argv)
 		wait(&status);
 	}
 
-	free(cmd_path);
+	if (ishandlepath)
+		free(cmd_path);
+
+	free_argv(&argv);
 	return (0);
 }
 

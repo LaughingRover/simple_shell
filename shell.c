@@ -16,11 +16,9 @@ int main(int argc, char **argv/*, char **env*/)
 
 	while (1)
 	{
-		prompt();
+		/*prompt();*/
 
 		interactive_mode(&argc, &argv);
-
-		free_argv(&argv);
 	}
 	return (0);
 }
@@ -107,13 +105,11 @@ void interactive_mode(int *argc, char ***argv)
 	char *line = NULL;
 	size_t len = 0;
 	int read_len = _getline(&line, &len, stdin);
-	char newline = '\n';
 	const char *delim;
 
 	if (read_len == -1) /*Exit on Ctrl+D (EOF)*/
 	{
 		free(line);
-		write(1, &newline, 1);
 		exit(0);
 	}
 	if (line[read_len - 1] == '\n') /*Replace '\n' with null-terminator*/
@@ -128,7 +124,6 @@ void interactive_mode(int *argc, char ***argv)
 	}
 	free(line);
 	run_command(argv);
-	free_argv(argv);
 }
 
 /**
