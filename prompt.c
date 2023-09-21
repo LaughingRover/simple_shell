@@ -42,6 +42,7 @@ int get_argv(char *input_line, char ***argv, const char *delim)
 		if ((*argv)[argc] == NULL)
 		{
 			perror("Memory allocation failed");
+			free_argv(argv);
 			return (-1);
 		}
 

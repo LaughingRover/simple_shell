@@ -93,11 +93,9 @@ int _setenv(char *name, char *value, int overwrite)
 
 			new_variable = _strcat(new_variable, name, value, '=');
 			/*replace old variable with new variable*/
-			free(*env_ptr);
 			*env_ptr = new_variable;
 
 			free(new_variable);
-			printf("overwrite suucesful\n");
 			return (0);
 		}
 		env_ptr++;
