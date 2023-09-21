@@ -26,14 +26,14 @@ int main(int argc, char **argv)
 
 	if (argc > 1)
 	{
-		exit(execute_commands_from_file(&argc, &argv));
+		exit(execute_commands_from_file(&argc, argv));
 	}
 
 	while (1)
 	{
 		prompt(0);
 
-		interactive_mode(&argc, &argv);
+		interactive_mode(argc, argv);
 	}
 	return (0);
 }
@@ -47,9 +47,9 @@ int main(int argc, char **argv)
  *
  * Return: 0 if successful, -1 on error
  */
-int execute_commands_from_file(int *argc, char ***argv)
+int execute_commands_from_file(int *argc, char **argv)
 {
-	char *filename = (*argv)[1];
+	char *filename = argv[1];
 	const char *delim = NULL;
 	ssize_t bytes_read = 0;
 	size_t n = BUFFER_SIZE;
@@ -65,15 +65,15 @@ int execute_commands_from_file(int *argc, char ***argv)
 	while ((bytes_read = readline(&lineptr, &n, fd)) != EOF)
 	{
 		delim = (_strchr(lineptr, ';')) ? ";" : " ";
-		*argc = get_argv(lineptr, argv, delim);
+		*argc = get_argv(lineptr, &argv, delim);
 
 		if (!(*argc > 1 && run_command(argv) != -1))
 		{
-			free_argv(*argv), free(lineptr), close(fd);
+			free_argv(argv), free(lineptr), close(fd);
 			return (-1);
 		}
 		_memset(lineptr, 0, n);
-		free_argv(*argv);
+		free_argv(argv);
 	}
 	free(lineptr);
 	close(fd);
@@ -87,7 +87,7 @@ int execute_commands_from_file(int *argc, char ***argv)
  *
  * Return: 0 success
  */
-void interactive_mode(int *argc, char ***argv)
+void interactive_mode(int argc, char **argv)
 {
 	char *line = NULL;
 	size_t len = 0;
@@ -101,15 +101,13 @@ void interactive_mode(int *argc, char ***argv)
 	}
 
 	delim = (_strchr(line, ';') != NULL) ? ";" : " ";
-	*argc = get_argv(line, argv, delim);
-	if (*argc < 1)
+	argc = get_argv(line, &argv, delim);
+	if (argc > 0)
 	{
-		free(line);
-		return;
+		run_command(argv);
+		free_argv(argv);
 	}
 	free(line);
-	run_command(argv);
-	free_argv(*argv);
 }
 
 /**
@@ -119,16 +117,16 @@ void interactive_mode(int *argc, char ***argv)
  *
  * Return: 0 if succesful and -1 if unsuccessful
  */
-int run_command(char ***argv)
+int run_command(char **argv)
 {
 	get_builtin execute_builtin;
 	int run_status;
 
-	execute_builtin = handle_builtin_func((*argv)[0]);
+	execute_builtin = handle_builtin_func(argv[0]);
 	if (execute_builtin)
 		run_status = execute_builtin(argv);
 	else
-		run_status = execute_command(*argv);
+		run_status = execute_command(argv);
 
 	return (run_status);
 }

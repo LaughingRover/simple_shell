@@ -29,6 +29,7 @@ int get_argv(char *input_line, char ***argv, const char *delim)
 	char *token = NULL;
 	size_t max_argc = 16;
 	size_t argc = 0;
+	size_t i = 0;
 
 	*argv = malloc(sizeof(char *) * max_argc);
 	if (*argv == NULL)
@@ -36,6 +37,10 @@ int get_argv(char *input_line, char ***argv, const char *delim)
 		perror("Memory allocation failed");
 		return (-1);
 	}
+
+	/*Initialize all pointers to NULL*/
+	while (i < max_argc)
+		(*argv)[i++] = NULL;
 
 	token = strtok(input_line, delim);
 	while (token != NULL)

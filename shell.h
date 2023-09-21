@@ -29,24 +29,24 @@ extern char **environ;
 typedef struct builtin_t
 {
 	char *name;
-	int (*func)(char ***argv);
+	int (*func)(char **argv);
 
 } builtin_t;
 
 void prompt(size_t signum);
-int execute_commands_from_file(int *argc, char ***argv);
-void interactive_mode(int *argc, char ***argv);
+int execute_commands_from_file(int *argc, char **argv);
+void interactive_mode(int argc, char **argv);
 char *handle_path(char *cmd);
-int run_command(char ***argv);
+int run_command(char **argv);
 int execute_command(char **argv);
 
 /*-----------builtin function------------------*/
-int (*handle_builtin_func(char *s))(char ***argv);
-typedef int (*get_builtin)(char ***argv);
-int modifyenv(char ***argv);
-int exit_simple_shell(char ***argv);
-int printenv(char ***argv UNUSED);
-int change_working_dir(char ***argv);
+int (*handle_builtin_func(char *s))(char **argv);
+typedef int (*get_builtin)(char **argv);
+int modifyenv(char **argv);
+int exit_simple_shell(char **argv);
+int printenv(char **argv UNUSED);
+int change_working_dir(char **argv);
 /*--------------------------------------------*/
 
 void trim(char **str);
