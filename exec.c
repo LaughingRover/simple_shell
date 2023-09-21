@@ -17,20 +17,17 @@ int execute_command(char **argv)
 		cmd_path = handle_path(cmd_path);
 		ishandlepath = 1;
 	}
-
 	if (cmd_path == NULL)
 	{
 		perror("Command not found");
 		return (-1);
 	}
-
 	child_pid = fork();
 	if (child_pid == -1)
 	{
 		perror("fork error");
 		return (-1);
 	}
-
 	if (child_pid == 0)
 	{
 		char *envp[] = {NULL};
@@ -46,7 +43,6 @@ int execute_command(char **argv)
 
 		wait(&status);
 	}
-
 	if (ishandlepath)
 		free(cmd_path);
 
