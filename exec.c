@@ -17,6 +17,7 @@ int execute_command(char **argv)
 		cmd_path = handle_path(cmd_path);
 		ishandlepath = 1;
 	}
+
 	if (cmd_path == NULL)
 	{
 		perror("Command not found");

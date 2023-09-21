@@ -17,6 +17,7 @@
 #endif
 
 #define BUFFER_SIZE 128
+#define PATH_MAX 4096
 
 extern char **environ;
 

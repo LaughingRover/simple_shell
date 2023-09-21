@@ -8,22 +8,44 @@
  */
 int change_working_dir(char ***argv)
 {
-	/**
-	 * TODO:
-	 * - Get home from env
-	 * - Add more features
-	 */
-	const char *HOME = "/home/vagrant";
+	char *path;
+	char old_cwd[PATH_MAX], new_cwd[PATH_MAX];
 
 	if ((*argv)[1] == NULL)
-	{
-		chdir(HOME);
-		return (0);
-	}
+		path = _getenv("HOME");
+	else if (_strcmp((*argv)[1], "-") == 0)
+		path = _getenv("OLDPWD");
+
 	else
+		path = (*argv)[1];
+
+	if (getcwd(old_cwd, sizeof(old_cwd)) == NULL)
 	{
+		perror("getcwd");
 		return (-1);
 	}
+	if (chdir(path) != 0)
+	{
+		perror("cd");
+		return (-1);
+	}
+	if (getcwd(new_cwd, sizeof(new_cwd)) == NULL)
+	{
+		perror("getcwd");
+		return (-1);
+	}
+
+	if (_setenv("OLDPWD", old_cwd, 1) != 0)
+	{
+		perror("setenv");
+		return (-1);
+	}
+	if (_setenv("PWD", new_cwd, 1) != 0)
+	{
+		perror("setenv");
+		return (-1);
+	}
+	return (0);
 }
 
 /**
