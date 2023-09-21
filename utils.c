@@ -51,7 +51,7 @@ char *_strtok(char *str, const char *delim)
 {
 	static char *lastToken;
 	char *endOfToken = NULL;
-	char *token;
+	char *token = NULL;
 
 	if (str != NULL)
 		lastToken = str;

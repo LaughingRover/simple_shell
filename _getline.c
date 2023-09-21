@@ -72,7 +72,7 @@ ssize_t readline(char **lineptr, size_t *n, int fd)
 	{
 		/*Check if buffer needs to be resized*/
 		if (total_bytes_read >= (ssize_t)(*n - 1) &&
-				resize_getline_buf(lineptr, n, (*n * 2)))
+		    resize_getline_buf(lineptr, n, (*n * 2)))
 		{
 			return (-1); /*Memory allocation Failed*/
 		}
@@ -87,6 +87,8 @@ ssize_t readline(char **lineptr, size_t *n, int fd)
 
 		if (read_buffer[buffer_index] == '\n')
 		{
+			/*Set Null Terminating character*/
+			(*lineptr)[buffer_index] = '\0';
 			/*Reset Buffer*/
 			buffer_index = 0;
 			_memset(read_buffer, 0, BUFFER_SIZE);
@@ -96,4 +98,3 @@ ssize_t readline(char **lineptr, size_t *n, int fd)
 		(*lineptr)[total_bytes_read++] = read_buffer[buffer_index++];
 	}
 }
-
