@@ -6,7 +6,7 @@
  *
  * Return: builtin function, NULL if it doesn't exist
  */
-int (*handle_builtin_func(char *cmd))(char ***argv)
+int (*handle_builtin_func(char *cmd))(char **argv)
 {
 	builtin_t builtins[] = {
 		{"exit", exit_simple_shell},

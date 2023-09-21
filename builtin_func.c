@@ -6,17 +6,17 @@
  *
  * Return: 0 on success
  */
-int change_working_dir(char ***argv)
+int change_working_dir(char **argv)
 {
 	char *path;
 	char old_cwd[PATH_MAX], new_cwd[PATH_MAX];
 
-	if ((*argv)[1] == NULL || _strcmp((*argv)[1], "~") == 0)
+	if (argv[1] == NULL || _strcmp(argv[1], "~") == 0)
 		path = _getenv("HOME");
-	else if (_strcmp((*argv)[1], "-") == 0)
+	else if (_strcmp(argv[1], "-") == 0)
 		path = _getenv("OLDPWD");
 	else
-		path = (*argv)[1];
+		path = argv[1];
 
 	if (getcwd(old_cwd, sizeof(old_cwd)) == NULL)
 	{
@@ -52,7 +52,7 @@ int change_working_dir(char ***argv)
  *
  * Return: 0 if successful
  */
-int printenv(char ***argv)
+int printenv(char **argv)
 {
 	int i = 0;
 
@@ -73,20 +73,20 @@ int printenv(char ***argv)
  *
  * Return: 0 on exit and status if exit code is given
  */
-int exit_simple_shell(char ***argv)
+int exit_simple_shell(char **argv)
 {
-	char *exit_code = (*argv)[1];
+	char *exit_code = argv[1];
 
 	if (!exit_code)
 	{
-		free_argv(*argv);
+		free_argv(argv);
 		exit(0);
 	}
 	else
 	{
 		int code = atoi(exit_code);
 
-		free_argv(*argv);
+		free_argv(argv);
 		exit(code);
 	}
 	return (0);
@@ -98,25 +98,25 @@ int exit_simple_shell(char ***argv)
  *
  * Return: 0 if successful
  */
-int modifyenv(char ***argv)
+int modifyenv(char **argv)
 {
-	char *command = (*argv)[0];
+	char *command = argv[0];
 	int result;
 
 	if (_strcmp(command, "setenv") == 0 &&
-	    ((*argv)[1] != NULL) && ((*argv)[2] != NULL))
+	    (argv[1] != NULL) && (argv[2] != NULL))
 	{
-		char *name = (*argv)[1];
-		char *value = (*argv)[2];
+		char *name = argv[1];
+		char *value = argv[2];
 
 		result = _setenv(name, value, 1);
 
 		return (result);
 	}
 
-	if (_strcmp(command, "unsetenv") == 0 && ((*argv)[1] != NULL))
+	if (_strcmp(command, "unsetenv") == 0 && (argv[1] != NULL))
 	{
-		char *name = (*argv)[1];
+		char *name = argv[1];
 
 		result = _unsetenv(name);
 
