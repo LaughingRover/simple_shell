@@ -1,5 +1,8 @@
 .vscode/
-TEST_SUITES
+TEST_SUITES/
+
 allowed_functions
 runchecker.bash
+
+core.*
 

@@ -77,13 +77,17 @@ int _setenv(char *name, char *value, int overwrite)
 		    ((*env_ptr)[name_len] == '='))
 		{
 			char *new_variable = malloc(new_variable_len);
-
 			if (new_variable == NULL)
 			{
 				perror("Failed to allocate memory");
 				return (-1);
 			}
 
+			/**
+			 * TODO:
+			 * If variable exists, unset variable
+			 * before setting a new one
+			*/
 			new_variable = _strcat(new_variable, name, value, '=');
 			/*replace old variable with new variable*/
 			*env_ptr = new_variable;
@@ -124,7 +128,6 @@ int _unsetenv(char *name)
 
 			/*move the remaining variables up the array*/
 			next_env_ptr = env_ptr + 1;
-
 			while (*next_env_ptr)
 				*env_ptr++ = *next_env_ptr++;
 
@@ -135,7 +138,7 @@ int _unsetenv(char *name)
 		env_ptr++;
 	}
 
-	return (0); /*variable not found*/
+	return (-1); /*variable not found*/
 }
 
 /**
@@ -150,7 +153,6 @@ char *_getenv(const char *name)
 	char *current_var;
 	unsigned int length = _strlen(name);
 
-
 	environ_copy = environ;
 	while (*environ_copy != NULL)
 	{
@@ -158,7 +160,7 @@ char *_getenv(const char *name)
 
 		/*checks if the current VAR matches name*/
 		if ((_strncmp(current_var, name, length) == 0) &&
-				(current_var[length] == '='))
+		    (current_var[length] == '='))
 		{
 			return (current_var + length + 1);
 			/*+1 is added to skip the '=' char*/

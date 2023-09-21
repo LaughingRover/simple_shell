@@ -11,11 +11,10 @@ int change_working_dir(char ***argv)
 	char *path;
 	char old_cwd[PATH_MAX], new_cwd[PATH_MAX];
 
-	if ((*argv)[1] == NULL)
+	if ((*argv)[1] == NULL || _strcmp((*argv)[1], "~") == 0)
 		path = _getenv("HOME");
 	else if (_strcmp((*argv)[1], "-") == 0)
 		path = _getenv("OLDPWD");
-
 	else
 		path = (*argv)[1];
 
@@ -34,7 +33,6 @@ int change_working_dir(char ***argv)
 		perror("getcwd");
 		return (-1);
 	}
-
 	if (_setenv("OLDPWD", old_cwd, 1) != 0)
 	{
 		perror("setenv");

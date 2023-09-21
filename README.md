@@ -18,6 +18,9 @@ interphase for unix like operating systems. It is both an interactive command
 language and is used by ioperating system to control the execution of the system
 using shell scripts
 
+## TEST SUITE
+[Simple shell tests](https://github.com/Fuzzworth/alx_test_suite/tree/main/simple_shell_project)
+
 ## Contributing
 
 Contributions to this repository are welcome! If you find any issues, have suggestions,
