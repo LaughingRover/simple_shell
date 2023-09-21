@@ -46,7 +46,6 @@ int execute_command(char **argv)
 	if (ishandlepath)
 		free(cmd_path);
 
-	free_argv(&argv);
 	return (0);
 }
 
@@ -61,7 +60,8 @@ char *handle_path(char *cmd)
 	char *path = _getenv("PATH");
 	char *path_copy;
 	char *token;
-	char *full_path = malloc(sizeof(char) * 1024);
+	char *full_path;
+	size_t full_path_len = 0;
 
 	path_copy = _strdup(path);
 	if ((path == NULL) || (path_copy == NULL))
@@ -70,7 +70,9 @@ char *handle_path(char *cmd)
 		return (NULL);
 	}
 
-	token = _strtok(path_copy, ":");
+	token = strtok(path_copy, ":");
+	full_path_len = _strlen(token) + _strlen(cmd) + 2;
+	full_path = malloc(sizeof(char) * full_path_len);
 	while (token)
 	{
 		/*concatenate the token in PATH with the command passed*/
@@ -81,7 +83,7 @@ char *handle_path(char *cmd)
 			free(path_copy);
 			return (full_path);
 		}
-		token = _strtok(NULL, ":");
+		token = strtok(NULL, ":");
 	}
 	free(path_copy);
 	return (NULL);

@@ -59,14 +59,14 @@ int exit_simple_shell(char ***argv)
 
 	if (!exit_code)
 	{
-		free_argv(argv);
+		free_argv(*argv);
 		exit(0);
 	}
 	else
 	{
 		int code = atoi(exit_code);
 
-		free_argv(argv);
+		free_argv(*argv);
 		exit(code);
 	}
 	return (0);
@@ -103,6 +103,6 @@ int modifyenv(char ***argv)
 		return (result);
 	}
 
-	perror("Error: Environment not modified");
+	perror(": Environment not modified");
 	return (-1);
 }

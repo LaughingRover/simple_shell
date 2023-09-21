@@ -1,14 +1,29 @@
 #include "shell.h"
 
 /**
+ * handle_signal - handle signals
+ * @sigint: signal number
+ */
+void handle_signal(int sigint)
+{
+	prompt(sigint);
+	if (sigint == 2)
+	{
+		errno = 130;
+	}
+}
+
+/**
  * main - Entry point
  * @argc: argument count
  * @argv: argument vector
  *
  * Return: 0 success
  */
-int main(int argc, char **argv/*, char **env*/)
+int main(int argc, char **argv)
 {
+	signal(SIGINT, handle_signal);
+
 	if (argc > 1)
 	{
 		exit(execute_commands_from_file(&argc, &argv));
@@ -16,7 +31,7 @@ int main(int argc, char **argv/*, char **env*/)
 
 	while (1)
 	{
-		/*prompt();*/
+		prompt(0);
 
 		interactive_mode(&argc, &argv);
 	}
@@ -35,41 +50,30 @@ int main(int argc, char **argv/*, char **env*/)
 int execute_commands_from_file(int *argc, char ***argv)
 {
 	char *filename = (*argv)[1];
-	int fd = open(filename, O_RDONLY);
+	const char *delim = NULL;
+	ssize_t bytes_read = 0;
 	size_t n = BUFFER_SIZE;
 	char *lineptr = malloc(n);
-	const char *delim;
+	int fd = open(filename, O_RDONLY);
 
-	if (fd == -1)
+	if (fd == -1 || lineptr == NULL)
 	{
-		perror("Error opening file"), free(lineptr);
+		free(lineptr);
 		return (-1);
 	}
 
-	while (1)
+	while ((bytes_read = readline(&lineptr, &n, fd)) != EOF)
 	{
-		ssize_t bytes_read = readline(&lineptr, &n, fd);
-
-		lineptr[bytes_read - 1] = '\0';
-		if (bytes_read == -1)
-		{
-			perror("Error reading line from file");
-			free(lineptr), close(fd);
-			return (-1);
-		}
-		if (bytes_read == 0)
-			break;
-
-		delim = (_strchr(lineptr, ';') != NULL) ? ";" : " ";
-
+		delim = (_strchr(lineptr, ';')) ? ";" : " ";
 		*argc = get_argv(lineptr, argv, delim);
+
 		if (!(*argc > 1 && run_command(argv) != -1))
 		{
-			free_argv(argv), free(lineptr), close(fd);
+			free_argv(*argv), free(lineptr), close(fd);
 			return (-1);
 		}
-		free_argv(argv);
-		lineptr[0] = '\0';
+		_memset(lineptr, 0, n);
+		free_argv(*argv);
 	}
 	free(lineptr);
 	close(fd);
@@ -88,15 +92,13 @@ void interactive_mode(int *argc, char ***argv)
 	char *line = NULL;
 	size_t len = 0;
 	int read_len = _getline(&line, &len, stdin);
-	const char *delim;
+	const char *delim = NULL;
 
 	if (read_len == -1) /*Exit on Ctrl+D (EOF)*/
 	{
 		free(line);
 		exit(0);
 	}
-	if (line[read_len - 1] == '\n') /*Replace '\n' with null-terminator*/
-		line[read_len - 1] = '\0';
 
 	delim = (_strchr(line, ';') != NULL) ? ";" : " ";
 	*argc = get_argv(line, argv, delim);
@@ -107,6 +109,7 @@ void interactive_mode(int *argc, char ***argv)
 	}
 	free(line);
 	run_command(argv);
+	free_argv(*argv);
 }
 
 /**
@@ -114,7 +117,7 @@ void interactive_mode(int *argc, char ***argv)
  * directing the flow of execution
  * @argv: argument vector
  *
- * Return: -1 if unsuccesful
+ * Return: 0 if succesful and -1 if unsuccessful
  */
 int run_command(char ***argv)
 {

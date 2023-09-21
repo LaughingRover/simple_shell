@@ -2,14 +2,18 @@
 
 /**
  * prompt - prints prompt to the output
+ * @signum: signal number
  */
-void prompt(void)
+void prompt(size_t signum)
 {
-	char *prompt = "$ ";
+	char *prompt = (!signum) ? "$ " : "\n$ ";
 	size_t prompt_len = _strlen(prompt);
 
-	write(STDOUT_FILENO, prompt, prompt_len);
-	fflush(stdout); /*Ensure the prompt is displayed immediately*/
+	if (isatty(STDIN_FILENO))
+	{
+		write(STDOUT_FILENO, prompt, prompt_len);
+		fflush(stdout); /*Ensure the prompt is displayed immediately*/
+	}
 }
 
 /**
@@ -33,7 +37,7 @@ int get_argv(char *input_line, char ***argv, const char *delim)
 		return (-1);
 	}
 
-	token = _strtok(input_line, delim);
+	token = strtok(input_line, delim);
 	while (token != NULL)
 	{
 		trim(&token);
@@ -42,19 +46,20 @@ int get_argv(char *input_line, char ***argv, const char *delim)
 		if ((*argv)[argc] == NULL)
 		{
 			perror("Memory allocation failed");
-			free_argv(argv);
+			free_argv(*argv);
 			return (-1);
 		}
 
-		token = _strtok(NULL, delim);
-		argc++;
+		token = strtok(NULL, delim);
 
+		argc++;
 		if (argc >= max_argc)
 		{
 			if (resize_argv(argv, &max_argc) != 0)
 				return (-1);
 		}
 	}
+	argv[argc] = NULL;
 
 	return (argc);
 }
@@ -63,16 +68,19 @@ int get_argv(char *input_line, char ***argv, const char *delim)
  * free_argv - frees an array of strings
  * @argv: pointer to an array of strings
  */
-void free_argv(char ***argv)
+void free_argv(char **argv)
 {
 	size_t i = 0;
 
-	while ((*argv)[i] != NULL)
+	if (argv == NULL)
+		return;
+
+	while (argv[i] != NULL)
 	{
-		free((*argv)[i]);
+		free(argv[i]);
 		i++;
 	}
-	free(*argv);
+	free(argv);
 }
 
 /**
@@ -99,7 +107,7 @@ int resize_argv(char ***argv, size_t *max_argc)
 		new_argv[i] = (*argv)[i];
 	}
 
-	free_argv(argv); /*Free the old array*/
+	free_argv(*argv); /*Free the old array*/
 	*argv = new_argv;
 
 	return (0);

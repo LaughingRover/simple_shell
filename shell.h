@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <signal.h>
 
 #ifdef __GNUC__
 #define UNUSED __attribute__((__unused__))
@@ -31,7 +32,7 @@ typedef struct builtin_t
 
 } builtin_t;
 
-void prompt(void);
+void prompt(size_t signum);
 int execute_commands_from_file(int *argc, char ***argv);
 void interactive_mode(int *argc, char ***argv);
 char *handle_path(char *cmd);
@@ -49,7 +50,7 @@ int change_working_dir(char ***argv);
 
 void trim(char **str);
 int get_argv(char *input_line, char ***argv, const char *delim);
-void free_argv(char ***argv);
+void free_argv(char **argv);
 int resize_argv(char ***argv, size_t *max_argc);
 char *_getenv(const char *name);
 
@@ -72,5 +73,7 @@ int _strcmp(const char *str1, const char *str2);
 char *_memset(char *s, char b, unsigned int n);
 char *_memcpy(char *dest, char *src, unsigned int n);
 void *_realloc(void *ptr, size_t size);
+
+void cmd_not_found(char *cmd);
 
 #endif /*SHELL_H*/
