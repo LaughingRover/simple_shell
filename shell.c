@@ -42,8 +42,7 @@ int execute_commands_from_file(int *argc, char ***argv)
 
 	if (fd == -1)
 	{
-		perror("Error opening file");
-		free(lineptr);
+		perror("Error opening file"), free(lineptr);
 		return (-1);
 	}
 
@@ -51,45 +50,29 @@ int execute_commands_from_file(int *argc, char ***argv)
 	{
 		ssize_t bytes_read = readline(&lineptr, &n, fd);
 
-		printf("\nbytes_read: %ld\n", bytes_read);
-
 		lineptr[bytes_read - 1] = '\0';
-
 		if (bytes_read == -1)
 		{
 			perror("Error reading line from file");
-			free(lineptr);
-			close(fd);
+			free(lineptr), close(fd);
 			return (-1);
 		}
-
-		/*EOF reached*/
 		if (bytes_read == 0)
 			break;
 
 		delim = (_strchr(lineptr, ';') != NULL) ? ";" : " ";
 
-		/*Tokenize command into argv*/
 		*argc = get_argv(lineptr, argv, delim);
-
-		printf("lineptr: %s %s\n", (*argv)[0], (*argv)[1]);
-		printf("argc: %d\n", *argc);
-
-		/*Execute command*/
 		if (!(*argc > 1 && run_command(argv) != -1))
 		{
-			free_argv(argv);
-			free(lineptr);
-			close(fd);
+			free_argv(argv), free(lineptr), close(fd);
 			return (-1);
 		}
-
 		free_argv(argv);
 		lineptr[0] = '\0';
 	}
 	free(lineptr);
 	close(fd);
-
 	return (0);
 }
 

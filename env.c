@@ -20,7 +20,6 @@ int set_new_env(char *name, char *value)
 		perror("No variable name or value found");
 		return (-1);
 	}
-
 	if (new_variable == NULL)
 	{
 		perror("Failed to allocate memory");
@@ -34,14 +33,9 @@ int set_new_env(char *name, char *value)
 		env_ptr++;
 
 	new_environ = malloc((env_ptr - environ + 2) * sizeof(char *));
-	/**
-	 * "(env_ptr - environ)" calculates the number of variables
-	 * in environment and +2 is for the new variable and NULL
-	 */
 	if (new_environ == NULL)
 	{
-		perror("Failed to allocate memory");
-		free(new_variable);
+		perror("Failed to allocate memory"), free(new_variable);
 		return (-ENOMEM);
 	}
 	/*copy existing environ into new environ*/
@@ -54,7 +48,6 @@ int set_new_env(char *name, char *value)
 	*new_env_ptr = NULL;
 	/* replace old envrionment with new environment*/
 	environ = new_environ;
-
 	return (0);
 }
 
