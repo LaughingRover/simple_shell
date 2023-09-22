@@ -3,70 +3,23 @@
 /**
  * prompt - prints prompt to the output
  * @signum: signal number
+ *
+ * Return: 1
  */
-void prompt(size_t signum)
+int prompt(size_t signum)
 {
 	char *prompt = (!signum) ? "$ " : "\n$ ";
 	size_t prompt_len = _strlen(prompt);
+
+	if (signum == 1)
+		prompt = "> ";
 
 	if (isatty(STDIN_FILENO))
 	{
 		write(STDOUT_FILENO, prompt, prompt_len);
 		fflush(stdout); /*Ensure the prompt is displayed immediately*/
 	}
-}
-
-/**
- * get_argv - splits string gotten from stdin
- * @input_line: string to split
- * @argv: is updated with tokenized string
- * @delim: delimiter
- *
- * Return: number of arguments parsed (argc) or -1 in case of an error
- */
-int get_argv(char *input_line, char ***argv, const char *delim)
-{
-	char *token = NULL;
-	size_t max_argc = 16;
-	size_t argc = 0;
-	size_t i = 0;
-
-	*argv = malloc(sizeof(char *) * max_argc);
-	if (*argv == NULL)
-	{
-		perror("Memory allocation failed");
-		return (-1);
-	}
-
-	/*Initialize all pointers to NULL*/
-	while (i < max_argc)
-		(*argv)[i++] = NULL;
-
-	token = strtok(input_line, delim);
-	while (token != NULL)
-	{
-		trim(&token);
-
-		(*argv)[argc] = _strdup(token);
-		if ((*argv)[argc] == NULL)
-		{
-			perror("Memory allocation failed");
-			free_argv(*argv);
-			return (-1);
-		}
-
-		token = strtok(NULL, delim);
-
-		argc++;
-		if (argc >= max_argc)
-		{
-			if (resize_argv(argv, &max_argc) != 0)
-				return (-1);
-		}
-	}
-	argv[argc] = NULL;
-
-	return (argc);
+	return (1);
 }
 
 /**
@@ -82,8 +35,7 @@ void free_argv(char **argv)
 
 	while (argv[i] != NULL)
 	{
-		free(argv[i]);
-		i++;
+		free(argv[i++]);
 	}
 	free(argv);
 }
@@ -119,7 +71,7 @@ int resize_argv(char ***argv, size_t *max_argc)
 }
 
 /**
- * trim - Trim leading and trailing whitespace from a string
+ * trim - Trim leading and trailing whitespace or quotes from a string
  * @str: string
  */
 void trim(char **str)
@@ -128,13 +80,13 @@ void trim(char **str)
 	char *end = *str + _strlen(*str) - 1;
 
 	/*Find the index of the first non-whitespace character*/
-	while (*start && (*start == ' ' || *start == '\t'))
+	while (*start && (*start == ' ' || *start == '"' || *start == '\t'))
 	{
 		start++;
 	}
 
 	/*Find the index of the last non-whitespace character*/
-	while (end > start && (*end == ' ' || *end == '\t'))
+	while (end > start && (*end == ' ' || *end == '"' || *end == '\t'))
 	{
 		end--;
 	}

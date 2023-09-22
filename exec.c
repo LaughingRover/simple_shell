@@ -17,7 +17,6 @@ int execute_command(char **argv)
 		cmd_path = handle_path(cmd_path);
 		ishandlepath = 1;
 	}
-
 	if (cmd_path == NULL)
 	{
 		perror("Command not found");
@@ -45,11 +44,6 @@ int execute_command(char **argv)
 		wait(&status);
 	}
 
-	/**
-	 * TODO:
-	 * setenv for command that was just executed in `_`
-	 * Do same for inbuilt funtions e.g env, printenv
-	*/
 	if (ishandlepath)
 		free(cmd_path);
 

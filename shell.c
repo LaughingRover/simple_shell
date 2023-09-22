@@ -29,11 +29,15 @@ int main(int argc, char **argv)
 		exit(execute_commands_from_file(&argc, argv));
 	}
 
-	while (1)
+	while (prompt(0))
 	{
-		prompt(0);
-
-		interactive_mode(argc, argv);
+		argc = get_argv(&argv);
+		if (argc > 0)
+		{
+			argv[argc] = NULL;
+			run_command(argv);
+			free_argv(argv);
+		}
 	}
 	return (0);
 }
@@ -47,8 +51,9 @@ int main(int argc, char **argv)
  *
  * Return: 0 if successful, -1 on error
  */
-int execute_commands_from_file(int *argc, char **argv)
+int execute_commands_from_file(int *argc UNUSED, char **argv UNUSED)
 {
+	/*
 	char *filename = argv[1];
 	const char *delim = NULL;
 	ssize_t bytes_read = 0;
@@ -77,37 +82,8 @@ int execute_commands_from_file(int *argc, char **argv)
 	}
 	free(lineptr);
 	close(fd);
+	*/
 	return (0);
-}
-
-/**
- * interactive_mode - Run shell in interactive mode
- * @argc: argument count
- * @argv: argument vector
- *
- * Return: 0 success
- */
-void interactive_mode(int argc, char **argv)
-{
-	char *line = NULL;
-	size_t len = 0;
-	int read_len = _getline(&line, &len, stdin);
-	const char *delim = NULL;
-
-	if (read_len == -1) /*Exit on Ctrl+D (EOF)*/
-	{
-		free(line);
-		exit(0);
-	}
-
-	delim = (_strchr(line, ';') != NULL) ? ";" : " ";
-	argc = get_argv(line, &argv, delim);
-	if (argc > 0)
-	{
-		run_command(argv);
-		free_argv(argv);
-	}
-	free(line);
 }
 
 /**

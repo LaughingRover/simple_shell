@@ -87,8 +87,12 @@ ssize_t readline(char **lineptr, size_t *n, int fd)
 
 		if (read_buffer[buffer_index] == '\n')
 		{
-			/*Set Null Terminating character*/
-			(*lineptr)[buffer_index] = '\0';
+			/**
+			 * Set Null Terminating character immediately
+			 * after the last character
+			 */
+			(*lineptr)[total_bytes_read + 1] = '\0';
+
 			/*Reset Buffer*/
 			buffer_index = 0;
 			_memset(read_buffer, 0, BUFFER_SIZE);
