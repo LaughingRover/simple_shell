@@ -62,9 +62,8 @@ int set_new_env(char *name, char *value)
 int _setenv(char *name, char *value, int overwrite)
 {
 	size_t name_len = _strlen(name);
-	size_t new_variable_len = name_len + _strlen(value) + 2;
 	/* +2 is added for '=' and '\0'*/
-
+	size_t new_variable_len = name_len + _strlen(value) + 2;
 	char **env_ptr = environ;
 
 	if (!overwrite)
@@ -77,6 +76,7 @@ int _setenv(char *name, char *value, int overwrite)
 		    ((*env_ptr)[name_len] == '='))
 		{
 			char *new_variable = malloc(new_variable_len);
+
 			if (new_variable == NULL)
 			{
 				perror("Failed to allocate memory");
