@@ -35,7 +35,8 @@ typedef struct builtin_t
 } builtin_t;
 
 int prompt(size_t signum);
-int execute_commands_from_file(int *argc, char **argv);
+void exit_with_error(int code, char *shell, const char *filename);
+int execute_commands_from_file(char **argv);
 char *handle_path(char *cmd);
 int run_command(char **argv);
 int execute_command(char **argv);

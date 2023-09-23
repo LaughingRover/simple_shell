@@ -1,6 +1,5 @@
 ls -l
 pwd
 env
-exit
-ls
+echo ls
 
