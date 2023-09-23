@@ -34,7 +34,7 @@ int append_token(size_t *argc,
 	if (*argc >= *max_argc)
 	{
 		char **new_argv = realloc(*argv,
-					  sizeof(char *) * (*max_argc *= 2));
+					sizeof(char *) * (*max_argc *= 2));
 		if (new_argv == NULL)
 			return (-ENOMEM);
 

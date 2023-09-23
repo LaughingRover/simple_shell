@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
 	if (argc > 1)
 	{
-		exit(execute_commands_from_file(&argc, argv));
+		exit(execute_commands_from_file(argv));
 	}
 
 	while (prompt(0))
@@ -43,46 +43,68 @@ int main(int argc, char **argv)
 }
 
 /**
+ * exit_with_error - writes message to stderr and exits with error code
+ * @code: error code
+ * @shell: shell program
+ * @filename: file name
+ */
+void exit_with_error(int code, char *shell, const char *filename)
+{
+	dprintf(STDERR_FILENO, "%s: 0: Can't open %s\n", shell, filename);
+	exit(code);
+}
+
+
+/**
  * execute_commands_from_file - Execute commands from a file
- * @argc: argument count
  * @argv: argument vector
  *
  * Description: Reads commands from the specified file and executes them
  *
  * Return: 0 if successful, -1 on error
+ *
  */
-int execute_commands_from_file(int *argc UNUSED, char **argv UNUSED)
+int execute_commands_from_file(char **argv)
 {
-	/*
-	char *filename = argv[1];
-	const char *delim = NULL;
-	ssize_t bytes_read = 0;
-	size_t n = BUFFER_SIZE;
-	char *lineptr = malloc(n);
-	int fd = open(filename, O_RDONLY);
+	char command[1000];
+	int fd;
+	ssize_t bytes_read;
 
-	if (fd == -1 || lineptr == NULL)
+	if (access(argv[1], R_OK) != 0)
+		exit_with_error(127, argv[0], argv[1]);
+
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
 	{
-		free(lineptr);
-		return (-1);
+		perror((char *)EACCES);
+		exit(127);
 	}
 
-	while ((bytes_read = readline(&lineptr, &n, fd)) != EOF)
+	while ((bytes_read = read(fd, command, sizeof(command))) > 0)
 	{
-		delim = (_strchr(lineptr, ';')) ? ";" : " ";
-		*argc = get_argv(lineptr, &argv, delim);
+		pid_t child_p = fork();
 
-		if (!(*argc > 1 && run_command(argv) != -1))
+		if (child_p == -1)
 		{
-			free_argv(argv), free(lineptr), close(fd);
-			return (-1);
+			perror("Error creating process");
+			return (1);
 		}
-		_memset(lineptr, 0, n);
-		free_argv(argv);
+
+		if (child_p == 0)
+		{
+			char *args[] = {"/bin/sh", "-c", NULL, NULL};
+
+			command[bytes_read] = '\0';
+			args[2] = command;
+
+			if (execve(args[0], args, environ) == -1)
+			{
+				perror("execve error");
+			}
+		}
 	}
-	free(lineptr);
-	close(fd);
-	*/
+
+	close(fd), exit(0);
 	return (0);
 }
 
@@ -106,3 +128,4 @@ int run_command(char **argv)
 
 	return (run_status);
 }
+
