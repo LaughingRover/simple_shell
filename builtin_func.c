@@ -8,8 +8,7 @@
  */
 int change_working_dir(char **argv)
 {
-	char *path;
-	char old_cwd[PATH_MAX], new_cwd[PATH_MAX];
+	char *path, old_dir[PATH_MAX], new_dir[PATH_MAX];
 
 	if (argv[1] == NULL || _strcmp(argv[1], "~") == 0)
 		path = _getenv("HOME");
@@ -18,31 +17,32 @@ int change_working_dir(char **argv)
 	else
 		path = argv[1];
 
-	if (getcwd(old_cwd, sizeof(old_cwd)) == NULL)
-	{
-		perror("getcwd");
+	if (access(path, X_OK) != 0)
+		(path)
+		    ? dprintf(STDERR_FILENO,
+			      "./hsh: 1: cd: can't cd to %s\n", path)
+		    : 0;
+
+	/*Get old pwd*/
+	if (getcwd(old_dir, sizeof(old_dir)) == NULL)
 		return (-1);
-	}
+
+	/*Change directory*/
 	if (chdir(path) != 0)
-	{
-		perror("cd");
 		return (-1);
-	}
-	if (getcwd(new_cwd, sizeof(new_cwd)) == NULL)
-	{
-		perror("getcwd");
+
+	/*Update old pwd*/
+	if (_setenv("OLDPWD", old_dir, 1) != 0)
 		return (-1);
-	}
-	if (_setenv("OLDPWD", old_cwd, 1) != 0)
-	{
-		perror("setenv");
+
+	/*Get new pwd*/
+	if (getcwd(new_dir, sizeof(new_dir)) == NULL)
 		return (-1);
-	}
-	if (_setenv("PWD", new_cwd, 1) != 0)
-	{
-		perror("setenv");
+
+	/*Update new pwd*/
+	if (_setenv("PWD", new_dir, 1) != 0)
 		return (-1);
-	}
+
 	return (0);
 }
 

@@ -7,7 +7,7 @@
  *
  * Return: 0 if successful
  */
-int set_new_env(char *name, char *value)
+int create_new_env(char *name, char *value)
 {
 	char **new_environ;
 	char **new_env_ptr, **env_ptr;
@@ -87,7 +87,7 @@ int _setenv(char *name, char *value, int overwrite)
 			 * TODO:
 			 * If variable exists, unset variable
 			 * before setting a new one
-			*/
+			 */
 			new_variable = _strcat(new_variable, name, value, '=');
 			/*replace old variable with new variable*/
 			*env_ptr = new_variable;
@@ -98,7 +98,7 @@ int _setenv(char *name, char *value, int overwrite)
 		env_ptr++;
 	}
 	/*if the variable does not exist*/
-	return (set_new_env(name, value));
+	return (create_new_env(name, value));
 }
 
 /**
@@ -170,4 +170,38 @@ char *_getenv(const char *name)
 	}
 
 	return (NULL);
+}
+
+char **create_env_table(char **envp)
+{
+	/*Count the number of environment variables*/
+	int count = 0, i;
+	char **env;
+
+	while (envp[count] != NULL)
+		count++;
+
+	/* Allocate memory for the array of environment variables*/
+	env = (char **)malloc((count + 1) * sizeof(char *));
+	if (env == NULL)
+	{
+		perror("Memory allocation failed");
+		exit(1);
+	}
+	memset(env, 0, (count + 1));
+
+	/* Copy each environment variable to the new array*/
+	for (i = 0; i < count; i++)
+	{
+		env[i] = _strdup(envp[i]);
+		if (env[i] == NULL)
+		{
+			perror("Memory allocation failed");
+			exit(1);
+		}
+	}
+	/* Add a NULL terminator to the end of the array*/
+	env[count] = NULL;
+
+	return (env);
 }
