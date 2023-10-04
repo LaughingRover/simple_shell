@@ -55,11 +55,12 @@ int get_argv(char ***argv);
 void free_argv(char **argv);
 int resize_argv(char ***argv, size_t *max_argc);
 char *_getenv(const char *name);
+char **create_env_table(char **envp);
 
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 ssize_t readline(char **lineptr, size_t *n, int fd);
 int resize_getline_buf(char **lineptr, size_t *n, size_t new_size);
-int set_new_env(char *name, char *value);
+int create_new_env(char *name, char *value);
 int _setenv(char *name, char *value, int overwrite);
 int _unsetenv(char *name);
 
