@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * set_new_env - adds a new environment variable
+ * create_new_env - adds a new environment variable
  * @name: name of variable
  * @value: value of variable
  *
@@ -170,7 +170,15 @@ char *_getenv(const char *name)
 	}
 
 	return (NULL);
+
 }
+
+/**
+ * create_env_table - creates environment variables
+ * @envp: array of strings
+ *
+ * Return: returns an array of strings containing environment variables.
+ */
 
 char **create_env_table(char **envp)
 {
